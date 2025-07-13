@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>We-Connect</title>
+	<!-- Firebase Core -->
+	<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js"></script>
+	
+	<style>
+		body { display: none; font-family: sans-serif; padding: 1rem; }
+		#feed .post { margin-bottom: 1rem; border-bottom: 1px solid #ccc; padding-bottom: 0.5rem; }
+	</style>
+	
+	<script type="module" src="../feed.js"></script>
+	<script type="module">
+		import { getCurrentUser } from "../auth.js";
+		const user = getCurrentUser();
+		if (!user) {
+			window.location.href = "guest.html";
+		} else {
+			document.body.style.display = "block";
+		}
+	</script>
+</head>
+<body>
+	<h1>We-Connect</h1>
+	
+	<h3>Welcome, <span id="user-display"></span>!</h3>
+	
+	<label for="scope-select">Select Chat Scope:</label>
+	<select id="scope-select"></select>
+	<h3>Messages</h3>
+	<div id="feed"></div>
+	
+	<textarea id="message" placeholder="Type a message..."></textarea><br>
+	<button id="postBtn">Send</button><br>
+	
+	
+	</br><a href="../index.html">Home</a>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Guest Chat - We-Connect</title>
+	<style>
+		body { font-family: sans-serif; padding: 1rem; max-width: 600px; margin: auto; }
+		input, textarea { width: 100%; margin: 0.5rem 0; padding: 0.5rem; }
+		button { padding: 0.5rem 1rem; }
+		.notice { font-size: 0.9rem; color: red; }
+	</style>
+</head>
+<body>
+	<h1>Guest Chat</h1>
+	<p class="notice">You can post up to 5 messages per hour. Use this to contact RGaming342 or request access if you’ve lost yours.</p>
+	
+	<textarea id="message" rows="4" placeholder="Type your message here..."></textarea>
+	<input id="contact" placeholder="Optional: contact info or username (if you had one)">
+	<button id="sendBtn">Send Message</button>
+	
+	<p id="status" class="notice"></p>
+	
+	<script type="module" src="guest.js"></script>
+	
+	<a href="../index.html">Home Page</a>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>RGaming342's Website</title>
+		<script src="feed.js" defer></script>
+		<script type="module">
+			import { getCurrentUser, logout } from "./auth.js";
+			
+			window.addEventListener("DOMContentLoaded", () => {
+				const container = document.getElementById("login-container");
+				const user = getCurrentUser();
+				
+				if (user) {
+					const logoutLink = document.createElement("a");
+					logoutLink.href = "#";
+					logoutLink.textContent = `Logout (${user.display})`;
+					logoutLink.addEventListener("click", e => {
+						e.preventDefault();
+						logout();
+					});
+					container.replaceChildren(logoutLink);
+				} else {
+					const loginLink = document.createElement("a");
+					loginLink.href = "./email-login.html";
+					loginLink.textContent = "Login";
+					container.replaceChildren(loginLink);
+				}
+			});
+		</script>
+	</head>
+	<body>
+		<h1>Hello, im RGaming342</h1>
+		<h2>this is my website,</h2>
+		<span id="login-container"><a href="email-login.html">Login</a></span>
+		<ul>
+			<li><a href="we-connect/index.html">we-connect</a></li>
+			<li>there are currently no other pages.</li>
+		</ul>
+		
+		<p>links to my stuff:</p>
+		<ul>
+			<li><a href="https://github.com/RGaming342"  target="_blank">Github</a></li>
+		</ul>
+	</body>
+</html>
+
+
+
