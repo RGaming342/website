@@ -1,8 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Email Login</title>
 	<script src="../feed.js" defer></script>
+	<script type="module" src="../email-login.js" defer></script>
 </head>
 <body>
 	<h1>Login via Email</h1>
@@ -12,52 +15,6 @@
 	<button id="loginBtn">Login</button>
 	
 	<p id="status"></p>
-	
-	<script type="module">
-		import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-		import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-		
-		const firebaseConfig = {
-			apiKey: "AIzaSyBOIu9AxDpW1_E2YzTVAfl-EtylvngInAw",
-			authDomain: "website-2a362.firebaseapp.com",
-			projectId: "website-2a362",
-			storageBucket: "website-2a362.firebasestorage.app",
-			messagingSenderId: "585365187275",
-			appId: "1:585365187275:web:3c5eb81e7186a5ccd3894e",
-			measurementId: "G-LYZMBYNK3M"
-		};
-		
-		const app = initializeApp(firebaseConfig);
-		const db = getFirestore(app);
-		
-		document.getElementById("loginBtn").addEventListener("click", async () => {
-			const email = document.getElementById("email").value.trim().toLowerCase();
-			const status = document.getElementById("status");
-			
-			if (!email.includes("@")) {
-				status.textContent = "Please enter a valid email.";
-				return;
-			}
-			
-			const q = query(collection(db, "users"), where("email", "==", email), where("active", "==", true));
-			const snapshot = await getDocs(q);
-			
-			if (snapshot.empty) {
-				status.textContent = "No account found with that email.";
-				return;
-			}
-			
-			const user = snapshot.docs[0].data();
-			
-			localStorage.setItem("auth_user", JSON.stringify({
-				email: user.email,
-				display: user.display || user.email
-			}));
-			
-			status.textContent = "Login successful!";
-			setTimeout(() => window.location.href = "index.html", 1000);
-		});
-	</script>
 	
 	<a href="index.html">Home</a>
 </body>
