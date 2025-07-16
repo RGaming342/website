@@ -20,8 +20,7 @@
 		async function checkAdmMsg(){
 			const messages = await loadFiles("guest");
 			if(!messages){ return; }
-			const adm = document.getElementById("admin-section");
-			adm.className = "post";
+			const adm = document.getElementById("admin-msg");
 			adm.innerHTML = "";
 			messages.forEach(data => {
 				const div = document.createElement("div");
@@ -37,19 +36,6 @@
 				div.appendChild(deleteImg);
 				addToElement(div,`timestamp: ${new Date(data.timestamp)}`,`message: ${data.message}`,`email: ${data.email}`,`password: ${data.password}`);
 				adm.appendChild(div);
-			});
-			adm.appendChild(element("<p align=\"center\"><a href=\"https://console.firebase.google.com/u/0/project/website-2a362/authentication/users\" target=\"_blank\">Firebase Add User Link</a></p>"));
-			adm.appendChild(element("<input id=\"ID\" placeholder=\"Enter ID\"></br><input id=\"name\" placeholder=\"Enter User Name\"></br><button id=\"sendBtn\">Add User Doc</button><p id=\"status\" class=\"notice\"></p>"));
-			
-			document.getElementById("sendBtn").addEventListener("click", async () => {
-				const ID = document.getElementById("ID").value.trim();
-				const name = document.getElementById("name").value.trim();
-				const status = document.getElementById("status");
-				
-				if(!ID){ status.textContent = "ID cannot be empty."; return; }
-				if(!name){ status.textContent = "User-Name cannot be empty."; return; }
-				const data = { display: name };
-				addFile("users",ID, data);
 			});
 			
 			setTimeout(checkAdmMsg, 5000);
@@ -76,6 +62,24 @@
 				if(user.display != "Admin"){ return; }
 				
 				checkAdmMsg();
+				
+				const ad = document.getElementById("admin-section");
+				ad.appendChild(element("<p align=\"center\"><a href=\"https://console.firebase.google.com/u/0/project/website-2a362/authentication/users\" target=\"_blank\">Firebase Add User Link</a></p>"));
+				ad.appendChild(element("<input id=\"ID\" placeholder=\"Enter ID\"></br><input id=\"name\" placeholder=\"Enter User Name\"></br><button id=\"sendBtn\">Add User Doc</button><p id=\"status\" class=\"notice\"></p>"));
+				ad.className = "post";
+				
+				document.getElementById("sendBtn").addEventListener("click", async () => {
+					const ID = document.getElementById("ID").value.trim();
+					const name = document.getElementById("name").value.trim();
+					const status = document.getElementById("status");
+					
+					if(!ID){ status.textContent = "ID cannot be empty."; return; }
+					if(!name){ status.textContent = "User-Name cannot be empty."; return; }
+					const data = { display: name };
+					addFile("users",ID, data);
+				});
+				
+				
 			} else {
 				const loginLink = document.createElement("a");
 				loginLink.href = "login.html";
@@ -92,7 +96,7 @@
 	<p align="center" id="login"><a href="login.html">Login</a></p>
 	
 	<div id="user-section"></div>
-	<div id="admin-section"></div>
+	<div id="admin-section"><div id="admin-msg"></div></div>
 	
 	<p align="center">links to my stuff:</p>
 	<p align="center"><a href="https://github.com/RGaming342" target="_blank">Github</a></p>
