@@ -34,10 +34,10 @@
 	<script type="module" src="../main.js"></script>
 	<script type="module">
 		import { getCurrentUser } from "../auth.js";
-		import { loadFiles, initChat, sendMessage, startMessagePolling } from "../main.js";
+		import { loadFiles, initChat, sendMessage } from "../main.js";
 		window.addEventListener("DOMContentLoaded", async () => {
 			const user = await getCurrentUser();
-			
+			console.log("A");
 			if(user){
 				document.body.style.display = "block";
 				const chats = await loadFiles("chats");

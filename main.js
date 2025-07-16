@@ -57,7 +57,7 @@ export async function initChat(chatName) {
 	loadedMessages = [];
 	
 	currentVersion = 0;
-	
+	console.log("B");
 	startMessagePolling();
 }
 export async function checkMessages() {
