@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Login</title>
+	<script src="auth.js" defer></script>
+	<script type="module">
+		import { sendGuestMessage } from '../auth.js';
+		
+		function canPost() {
+			const now = Date.now();
+			const hourAgo = now - 3600_000;
+			const log = JSON.parse(localStorage.getItem("guest_log") || "[]");
+			const recent = log.filter(t => t > hourAgo);
+			
+			if (recent.length >= 5) return false;
+			
+			recent.push(now);
+			localStorage.setItem("guest_log", JSON.stringify(recent));
+			return true;
+		}
+		
+		document.getElementById("sendBtn").addEventListener("click", async () => {
+			const message = document.getElementById("message").value.trim();
+			const email = document.getElementById("email").value.trim().toLowerCase();
+			const password = document.getElementById("password").value.trim();
+			const status = document.getElementById("status");
+			
+			if(!message){ status.textContent = "Message cannot be empty."; return; }
+			if(email === ""){ status.textContent = "Must fill out email."; return; }
+			if(!email.includes("@")){ status.textContent = "Invalid email."; return; }
+			if(password === ""){ status.textContent = "Must fill out password."; return; }
+			if(password.length < 6){ status.textContent = "Password must be 6 characters Minimum."; return; }
+			
+			if(!canPost()){ status.textContent = "Rate limit reached: 5 messages/hour."; return; }
+			
+			try {
+				await sendGuestMessage(message, email, password);
+				status.textContent = "Message sent successfully!";
+				document.getElementById("message").value = "";
+				document.getElementById("email").value = "";
+				document.getElementById("password").value = "";
+			} catch (err) {
+				console.error("Send failed:", err);
+				status.textContent = "Error sending message.";
+			}
+		});
+	</script>
+	<style>
+		body { font-family: sans-serif; padding: 1rem; max-width: 600px; margin: auto; }
+		input, textarea { width: 100%; margin: 0.5rem 0; padding: 0.5rem; }
+		button { padding: 0.5rem 1rem; }
+		.notice { font-size: 0.9rem; color: red; }
+	</style>
+</head>
+<body>
+	<h1>Guest Chat</h1>
+	<h3>Please include your username in your massage.</h3>
+	<p class="notice">You can post up to 5 messages per hour. Use this to contact RGaming342 or request access if you’ve lost yours.</p>
+	
+	<textarea id="message" rows="4" placeholder="Type your message here..."></textarea>
+	<input id="email" placeholder="Enter Email">
+	<input id="password" placeholder="Enter Password">
+	<button id="sendBtn">Send Message</button>
+	
+	<p id="status" class="notice"></p>
+	
+	<a href="login.html">Login</a></br>
+	<a href="index.html">Home</a>
+</body>
+</html>

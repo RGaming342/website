@@ -1,50 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0">
-		<title>RGaming342's Website</title>
-		<script src="feed.js" defer></script>
-		<script type="module">
-			import { getCurrentUser, logout } from "./auth.js";
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>RGaming342's Website</title>
+	<style>
+		.post {
+			margin: auto;
+			border: 4px solid #ccc;
+			padding: 0.5rem;
+			width:fit-content;
+			margin-bottom: 1rem
+		}
+	</style>
+	<script type="module">
+		import { getCurrentUser, logout } from "../auth.js";
+		import { loadFiles, addToElement, deleteFile, element, addFile } from "../main.js";
+		window.addEventListener("DOMContentLoaded", async () => {
+			const container = document.getElementById("login");
+			const user = await getCurrentUser();
 			
-			window.addEventListener("DOMContentLoaded", () => {
-				const container = document.getElementById("login-container");
-				const user = getCurrentUser();
+			if(user){
+				const logoutLink = document.createElement("a");
+				logoutLink.href = "#";
+				logoutLink.textContent = `Logout (${user.display})`;
+				logoutLink.addEventListener("click", e => {
+					e.preventDefault();
+					logout();
+				});
+				container.replaceChildren(logoutLink);
 				
-				if (user) {
-					const logoutLink = document.createElement("a");
-					logoutLink.href = "#";
-					logoutLink.textContent = `Logout (${user.display})`;
-					logoutLink.addEventListener("click", e => {
-						e.preventDefault();
-						logout();
+				const usr = document.getElementById("user-section");
+				usr.className = "post";
+				usr.innerHTML = "";
+				usr.appendChild(element("<ul><li><a href=\"pages/we-connect.html\">we-connect</a></li><li>there are currently no other pages.</li></ul>"));
+				
+				if(user.display != "Admin"){ return; }
+				
+				const messages = await loadFiles("guest");
+				if(!messages){ return; }
+				const adm = document.getElementById("admin-section");
+				adm.className = "post";
+				adm.innerHTML = "";
+				messages.forEach(data => {
+					const div = document.createElement("div");
+					div.className = "post";
+					const deleteImg = document.createElement("img");
+					deleteImg.src = "delete.png";
+					deleteImg.alt = "Delete";
+					deleteImg.className = "delete-button";
+					deleteImg.addEventListener("click", () => {
+						deleteFile("guest",data.id);
+						div.remove();
 					});
-					container.replaceChildren(logoutLink);
-				} else {
-					const loginLink = document.createElement("a");
-					loginLink.href = "./email-login.html";
-					loginLink.textContent = "Login";
-					container.replaceChildren(loginLink);
-				}
-			});
-		</script>
-	</head>
-	<body>
-		<h1>Hello, im RGaming342</h1>
-		<h2>this is my website,</h2>
-		<span id="login-container"><a href="email-login.html">Login</a></span>
-		<ul>
-			<li><a href="we-connect/index.html">we-connect</a></li>
-			<li>there are currently no other pages.</li>
-		</ul>
-		
-		<p>links to my stuff:</p>
-		<ul>
-			<li><a href="https://github.com/RGaming342"  target="_blank">Github</a></li>
-		</ul>
-	</body>
+					div.appendChild(deleteImg);
+					addToElement(div,`timestamp: ${new Date(data.timestamp)}`,`message: ${data.message}`,`email: ${data.email}`,`password: ${data.password}`);
+					adm.appendChild(div);
+				});
+				adm.appendChild(element("<p align=\"center\"><a href=\"https://console.firebase.google.com/u/0/project/website-2a362/authentication/users\" target=\"_blank\">Firebase Add User Link</a></p>"));
+				adm.appendChild(element("<input id=\"ID\" placeholder=\"Enter ID\"></br><input id=\"name\" placeholder=\"Enter User Name\"></br><button id=\"sendBtn\">Add User Doc</button><p id=\"status\" class=\"notice\"></p>"));
+				document.getElementById("sendBtn").addEventListener("click", async () => {
+					const ID = document.getElementById("ID").value.trim();
+					const name = document.getElementById("name").value.trim();
+					const status = document.getElementById("status");
+					
+					if(!ID){ status.textContent = "ID cannot be empty."; return; }
+					if(!name){ status.textContent = "User-Name cannot be empty."; return; }
+					const data = { display: name };
+					addFile("users",ID, data);
+				});
+				
+				
+			} else {
+				const loginLink = document.createElement("a");
+				loginLink.href = "../login.html";
+				loginLink.textContent = "Login";
+				container.replaceChildren(loginLink);
+			}
+		});
+	</script>
+</head>
+<body>
+	<h2 align="center">Hello</h2>
+	<h1 align="center">Im RGaming342</h1>
+	<h2 align="center">this is my website,</h2>
+	<p align="center" id="login"><a href="login.html">Login</a></p>
+	
+	<div id="user-section"></div>
+	<div id="admin-section"></div>
+	
+	<p align="center">links to my stuff:</p>
+	<p align="center"><a href="https://github.com/RGaming342" target="_blank">Github</a></p>
+</body>
 </html>
-
-
-

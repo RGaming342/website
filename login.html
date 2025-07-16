@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Login</title>
+	<script type="module">
+		import { loginUser } from "../auth.js";
+		document.getElementById("loginBtn").addEventListener("click", async () => {
+			const email = document.getElementById("email").value.trim().toLowerCase();
+			const password = document.getElementById("password").value;
+			const status = document.getElementById("status");
+			
+			if(email === ""){ status.textContent = "Must fill out email."; return; }
+			if(!email.includes("@")){ status.textContent = "Invalid email."; return; }
+			if(password === ""){ status.textContent = "Must fill out password."; return; }
+			if(password.length < 6){ status.textContent = "Password must be 6 characters Minimum."; return; }
+			
+			const user = await loginUser(email,password);
+			
+			if(!user){ status.textContent = "No account found."; return; }
+			
+			status.textContent = "Login successful!";
+			setTimeout(() => window.location.href = "index.html", 0);
+		});
+	</script>
+</head>
+<body>
+	<h1 align="center">Login With Email</h1>
+	<p align="center">Enter your email address to log in.</p>
+	
+	<p align="center">
+		<input id="email" placeholder="your@email.com"></br>
+		<input id="password" placeholder="password"></br>
+		<button id="loginBtn">Login</button>
+	</p>
+	
+	<p align="center" id="status"></p>
+	
+	<h3 align="center">Dont have an Account yet?</h3>
+	<h3 align="center">Request One! -> <a href="request-account.html">Request Account</a></h3>
+	
+	<p align="center"><a href="index.html"><strong>Home</strong></a></p>
+</body>
+</html>

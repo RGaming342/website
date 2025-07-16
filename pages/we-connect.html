@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>RGaming342's Website</title>
+	<style>
+		.post {
+			margin: auto;
+			border: 4px solid #ccc;
+			padding: 0.5rem;
+			width:fit-content;
+			margin-bottom: 1rem
+		}
+		body {
+			font-family: sans-serif;
+			display: none;
+		}
+		.stay {
+			position: fixed;
+		}
+		.chat {
+			background-color: #99DDEE;
+			overflow-y: scroll;
+			border: 4px solid #6699AA;
+			padding: auto;
+			width: 90%;
+			height: 400px;
+			text-align: center;
+			margin: auto;
+			line-height: 0.1;
+		}
+	</style>
+	<script type="module" src="../main.js"></script>
+	<script type="module">
+		import { getCurrentUser } from "../auth.js";
+		import { loadFiles, initChat, sendMessage } from "../main.js";
+		window.addEventListener("DOMContentLoaded", async () => {
+			const user = await getCurrentUser();
+			
+			if(user){
+				document.body.style.display = "block";
+				const chats = await loadFiles("chats");
+				
+				const chatSelect = document.getElementById("chat-select");
+				chatSelect.innerHTML = "";
+				
+				chats.forEach(chat => {
+					if(chat.allowed.includes(user.uid)){
+						const option = document.createElement("option");
+						option.value = chat.id;
+						option.textContent = chat.id;
+						chatSelect.appendChild(option);
+					}
+				});
+				
+				if(chatSelect.options.length > 0){
+					chatSelect.selectedIndex = 0;
+				}
+				
+				initChat(chatSelect.value);
+				
+				document.getElementById("postBtn").addEventListener("click", () => {
+					sendMessage(user.display,document.getElementById("message").value.trim());
+					document.getElementById("message").value = "";
+				});
+				chatSelect.addEventListener("change", () => {
+					initChat(chatSelect.value);
+				});
+			}else{
+				window.location.href = "../login.html";
+				return;
+			}
+		});
+	</script>
+</head>
+<body>
+	<h1 align="center">We-Connect</h1>
+	
+	<p align="center"><label for="chat-select">Select Chat:</label> <select id="chat-select"></select></p>
+	
+	<p align="center">this is being worked on.</p>
+	
+	<div id="user-section" class="chat"></div>
+	
+	<div class="post">
+		<textarea id="message" placeholder="Type a message..."></textarea><br />
+		<button id="postBtn">Send</button><br />
+	</div>
+	
+	<div id="admin-section"></div>
+	<p align="center"><a href="../index.html"><strong>Home</strong></a></p>
+</body>
+</html>
