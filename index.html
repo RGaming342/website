@@ -13,11 +13,11 @@
 			margin-bottom: 1rem
 		}
 	</style>
-	<script type="module" src="website/main.js" defer></script>
-	<script type="module" src="website/auth.js" defer></script>
+	<script type="module" src="./main.js" defer></script>
+	<script type="module" src="./auth.js" defer></script>
 	<script type="module">
-		import { getCurrentUser, logout } from "website/auth.js";
-		import { loadFiles, addToElement, deleteFile, element, addFile } from "website/main.js";
+		import { getCurrentUser, logout } from "./auth.js";
+		import { loadFiles, addToElement, deleteFile, element, addFile } from "./main.js";
 		window.addEventListener("DOMContentLoaded", async () => {
 			const container = document.getElementById("login");
 			const user = await getCurrentUser();
