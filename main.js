@@ -104,7 +104,6 @@ export async function startMessagePolling(){
 	
 	const newMessages = await checkMessages();
 	if(newMessages.length > 0){
-		console.log("A");
 		const dt = document.getElementById("user-section");
 		dt.innerHTML = "";
 		loadedMessages.forEach(msg => {
