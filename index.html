@@ -16,6 +16,44 @@
 	<script type="module">
 		import { getCurrentUser, logout } from "./auth.js";
 		import { loadFiles, addToElement, deleteFile, element, addFile } from "./main.js";
+		
+		async function checkAdmMsg(){
+			const messages = await loadFiles("guest");
+			if(!messages){ return; }
+			const adm = document.getElementById("admin-section");
+			adm.className = "post";
+			adm.innerHTML = "";
+			messages.forEach(data => {
+				const div = document.createElement("div");
+				div.className = "post";
+				const deleteImg = document.createElement("img");
+				deleteImg.src = "delete.png";
+				deleteImg.alt = "Delete";
+				deleteImg.className = "delete-button";
+				deleteImg.addEventListener("click", () => {
+					deleteFile("guest",data.id);
+					div.remove();
+				});
+				div.appendChild(deleteImg);
+				addToElement(div,`timestamp: ${new Date(data.timestamp)}`,`message: ${data.message}`,`email: ${data.email}`,`password: ${data.password}`);
+				adm.appendChild(div);
+			});
+			adm.appendChild(element("<p align=\"center\"><a href=\"https://console.firebase.google.com/u/0/project/website-2a362/authentication/users\" target=\"_blank\">Firebase Add User Link</a></p>"));
+			adm.appendChild(element("<input id=\"ID\" placeholder=\"Enter ID\"></br><input id=\"name\" placeholder=\"Enter User Name\"></br><button id=\"sendBtn\">Add User Doc</button><p id=\"status\" class=\"notice\"></p>"));
+			
+			document.getElementById("sendBtn").addEventListener("click", async () => {
+				const ID = document.getElementById("ID").value.trim();
+				const name = document.getElementById("name").value.trim();
+				const status = document.getElementById("status");
+				
+				if(!ID){ status.textContent = "ID cannot be empty."; return; }
+				if(!name){ status.textContent = "User-Name cannot be empty."; return; }
+				const data = { display: name };
+				addFile("users",ID, data);
+			});
+			
+			setTimeout(checkAdmMsg, 5000);
+		}
 		window.addEventListener("DOMContentLoaded", async () => {
 			const container = document.getElementById("login");
 			const user = await getCurrentUser();
@@ -37,40 +75,7 @@
 				
 				if(user.display != "Admin"){ return; }
 				
-				const messages = await loadFiles("guest");
-				if(!messages){ return; }
-				const adm = document.getElementById("admin-section");
-				adm.className = "post";
-				adm.innerHTML = "";
-				messages.forEach(data => {
-					const div = document.createElement("div");
-					div.className = "post";
-					const deleteImg = document.createElement("img");
-					deleteImg.src = "delete.png";
-					deleteImg.alt = "Delete";
-					deleteImg.className = "delete-button";
-					deleteImg.addEventListener("click", () => {
-						deleteFile("guest",data.id);
-						div.remove();
-					});
-					div.appendChild(deleteImg);
-					addToElement(div,`timestamp: ${new Date(data.timestamp)}`,`message: ${data.message}`,`email: ${data.email}`,`password: ${data.password}`);
-					adm.appendChild(div);
-				});
-				adm.appendChild(element("<p align=\"center\"><a href=\"https://console.firebase.google.com/u/0/project/website-2a362/authentication/users\" target=\"_blank\">Firebase Add User Link</a></p>"));
-				adm.appendChild(element("<input id=\"ID\" placeholder=\"Enter ID\"></br><input id=\"name\" placeholder=\"Enter User Name\"></br><button id=\"sendBtn\">Add User Doc</button><p id=\"status\" class=\"notice\"></p>"));
-				document.getElementById("sendBtn").addEventListener("click", async () => {
-					const ID = document.getElementById("ID").value.trim();
-					const name = document.getElementById("name").value.trim();
-					const status = document.getElementById("status");
-					
-					if(!ID){ status.textContent = "ID cannot be empty."; return; }
-					if(!name){ status.textContent = "User-Name cannot be empty."; return; }
-					const data = { display: name };
-					addFile("users",ID, data);
-				});
-				
-				
+				checkAdmMsg();
 			} else {
 				const loginLink = document.createElement("a");
 				loginLink.href = "login.html";
