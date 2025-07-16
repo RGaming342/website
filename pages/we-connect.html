@@ -65,6 +65,7 @@
 					document.getElementById("message").value = "";
 				});
 				chatSelect.addEventListener("change", () => {
+					document.getElementById("user-section").innerHTML = "";
 					initChat(chatSelect.value);
 				});
 			}else{
