@@ -15,7 +15,7 @@
 	</style>
 	<script type="module">
 		import { getCurrentUser, logout } from "/auth.js";
-		import { loadFiles, addToElement, deleteFile, element, addFile } from "main.js";
+		import { loadFiles, addToElement, deleteFile, element, addFile } from "/main.js";
 		window.addEventListener("DOMContentLoaded", async () => {
 			const container = document.getElementById("login");
 			const user = await getCurrentUser();
