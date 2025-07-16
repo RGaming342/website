@@ -57,7 +57,7 @@ export async function initChat(chatName) {
 	loadedMessages = [];
 	
 	currentVersion = 0;
-	console.log("B");
+	
 	startMessagePolling();
 }
 export async function checkMessages() {
@@ -100,10 +100,11 @@ function resetChat() {
 function getAllMessages() {
 	return [...loadedMessages];
 }
-export async function startMessagePolling() {
-	console.log("C");
+export async function startMessagePolling(){
+	
 	const newMessages = await checkMessages();
 	if(newMessages.length > 0){
+		console.log("A");
 		const dt = document.getElementById("user-section");
 		dt.innerHTML = "";
 		loadedMessages.forEach(msg => {
