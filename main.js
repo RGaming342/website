@@ -80,13 +80,15 @@ export async function checkMessages() {
 	
 	const msgQuery = query(
 		collection(db, "chats", currentChatName, "messages"),
-		orderBy("timestamp", "asc"),
-		startAfter(lastTimestamp)
+		orderBy("timestamp", "desc"),
+		//startAfter(lastTimestamp),
+		limit(20)
 	);
 	
 	const snap = await getDocs(msgQuery);
-	const newMessages = snap.docs.map(doc => ({ id: doc.id, content: doc.data().message, timestamp: doc.data().timestamp, sender: doc.data().user }));
+	let newMessages = snap.docs.map(doc => ({ id: doc.id, content: doc.data().message, timestamp: doc.data().timestamp, sender: doc.data().user }));
 	
+	newMessages = newMessages.reverse();
 	loadedMessages = [...loadedMessages, ...newMessages];
 	
 	return newMessages;
@@ -103,6 +105,7 @@ function getAllMessages() {
 export async function startMessagePolling(){
 	
 	const newMessages = await checkMessages();
+	console.log(newMessages.length);
 	if(newMessages.length > 0){
 		const dt = document.getElementById("user-section");
 		dt.innerHTML = "";
