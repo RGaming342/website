@@ -1,4 +1,4 @@
-import { auth, signInWithEmailAndPassword, db, doc, getDoc, addDoc, collection } from "./main.js"
+import { auth, signInWithEmailAndPassword, db, doc, getDoc, addDoc, collection } from "../main.js"
 
 
 

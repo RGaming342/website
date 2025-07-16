@@ -1,7 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getFirestore, collection, doc, getDoc, getDocs, addDoc, query, orderBy, onSnapshot, limit, deleteDoc, setDoc, startAfter, updateDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 import { getAuth, signInAnonymously, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getCurrentUser } from "./auth.js";
+import { getCurrentUser } from "../auth.js";
 
 // Firebase config
 const firebaseConfig = {
