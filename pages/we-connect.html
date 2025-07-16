@@ -31,10 +31,10 @@
 			line-height: 0.1;
 		}
 	</style>
-	<script type="module" src="../main.js"></script>
+	<script type="module" src="main.js"></script>
 	<script type="module">
-		import { getCurrentUser } from "../auth.js";
-		import { loadFiles, initChat, sendMessage } from "../main.js";
+		import { getCurrentUser } from "auth.js";
+		import { loadFiles, initChat, sendMessage } from "main.js";
 		window.addEventListener("DOMContentLoaded", async () => {
 			const user = await getCurrentUser();
 			
