@@ -101,7 +101,7 @@ function getAllMessages() {
 	return [...loadedMessages];
 }
 export async function startMessagePolling() {
-	
+	console.log("C");
 	const newMessages = await checkMessages();
 	if(newMessages.length > 0){
 		const dt = document.getElementById("user-section");

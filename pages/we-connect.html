@@ -37,7 +37,7 @@
 		import { loadFiles, initChat, sendMessage } from "../main.js";
 		window.addEventListener("DOMContentLoaded", async () => {
 			const user = await getCurrentUser();
-			
+			console.log("A");
 			if(user){
 				document.body.style.display = "block";
 				const chats = await loadFiles("chats");
@@ -59,7 +59,7 @@
 				}
 				
 				initChat(chatSelect.value);
-				
+				console.log("B");
 				document.getElementById("postBtn").addEventListener("click", () => {
 					sendMessage(user.display,document.getElementById("message").value.trim());
 					document.getElementById("message").value = "";
